@@ -22,7 +22,7 @@ public slots:
 
     void on_add_vertex_clicked();
     void on_addedge_clicked();
-    void Receiving_objects_counter(int,int);
+    void Receiving_objects_counter(size_t,size_t);
 
 private:
     Ui::MainWindow *ui;

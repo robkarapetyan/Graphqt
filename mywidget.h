@@ -16,9 +16,10 @@ public:
     explicit mywidget(QWidget *parent = nullptr);
 
 signals:
-    void objects_total_signal(int,int);
+    void objects_total_signal(size_t,size_t);
+    void add_edge_signal_for_graph(Node*,Node*);
+    void show_blocks();
 public slots:
-   // void mouseclickedxy(int a,int b);
     void Receiving_button(int t);
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -29,16 +30,15 @@ protected:
 
 private:
     bool clicked_on_node = false;
-    //QPoint m_mousePos;
-     QVector<Node *> nodes;
-     QVector<QVector<Node *>> edges;
-     int clicked_node_index;
+    std::vector<std::vector<Node *>> edges;
+    size_t clicked_node_index;
     bool add_vertex_received = false;
     bool add_edge_received = false;
     bool delete_received = false;
-    QVector<Node *> tmp;
-
+    std::vector<Node *> tmp;
+    Graph graph;
 
 };
+
 
 #endif // MYWIDGET_H

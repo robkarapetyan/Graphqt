@@ -4,16 +4,20 @@
 #include <QObject>
 #include <QPoint>
 #include <QVector>
-
+#include <QPainter>
+#include <QColor>
 
 
 class Node : public QObject
 {
     Q_OBJECT
 public:
+
     explicit Node(QObject *parent = nullptr);
     QPoint m_point;
-    QVector<QPoint *> m_nexts;
+    std::vector<Node *> m_nexts;
+    QColor a;
+
     bool selected;
 signals:
 

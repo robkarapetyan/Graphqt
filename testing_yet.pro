@@ -26,7 +26,6 @@ CONFIG += c++11
 
 SOURCES += \
         graph.cpp \
-        grapheditor.cpp \
         main.cpp \
         mainwindow.cpp \
         mywidget.cpp \
@@ -34,7 +33,6 @@ SOURCES += \
 
 HEADERS += \
         graph.h \
-        grapheditor.h \
         mainwindow.h \
         mywidget.h \
         node.h
