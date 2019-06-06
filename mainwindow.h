@@ -32,10 +32,12 @@ signals:
     void Add_edge_signal(int);
     void show_blocks_signal(int);
     void delete_signal(int);
+    void show_bridges_signal(int);
 private slots:
 
     void on_show_blocks_clicked();
     void on_delete_2_clicked();
+    void on_show_bridges_clicked();
 };
 
 #endif // MAINWINDOW_H

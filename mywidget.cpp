@@ -7,6 +7,7 @@ mywidget::mywidget(QWidget *parent) : QWidget(parent)
 {
     QObject::connect(this,SIGNAL(add_edge_signal_for_graph(Node*,Node*)),&graph,SLOT(add_edge_to_node_slot(Node*,Node*)));
     QObject::connect(this,SIGNAL(show_blocks()),&graph,SLOT(show_blocks_slot()));
+    QObject::connect(this,SIGNAL(show_bridges()),&graph,SLOT(show_bridges_slot()));
 
     QPalette Pal(palette());
 
@@ -36,6 +37,10 @@ void mywidget::Receiving_button(int t)
     case 4:
     delete_received = !delete_received;
     break;
+    case 5:
+     emit show_bridges();
+     break;
+
     default:
     break;
  }
@@ -54,6 +59,7 @@ void mywidget::mouseMoveEvent(QMouseEvent *event)
 
 void mywidget::mousePressEvent(QMouseEvent *event){
     QWidget::mousePressEvent( event);
+
     for(size_t i = 0; i < graph.nodes.size();++i)
     {
         if(graph.nodes[i]->m_point.x() +20 > event->x() && event->x() > graph.nodes[i]->m_point.x() - 20)
@@ -62,6 +68,8 @@ void mywidget::mousePressEvent(QMouseEvent *event){
             {
                clicked_on_node = true;
                clicked_node_index = i;
+
+
               // qDebug() << clicked_node_index;
                break;
              }
@@ -70,6 +78,8 @@ void mywidget::mousePressEvent(QMouseEvent *event){
             }
         }
     }
+
+
 
 if (event->button() == Qt::LeftButton)
 {
@@ -85,19 +95,57 @@ if (event->button() == Qt::LeftButton)
       }
       else if(delete_received && clicked_on_node)
         {
-              for(size_t j = 0; j < edges.size(); ++j)
-                       {
-                       for(size_t i = 0; i < edges.size(); ++i)
-                       {
-                               if(edges[i][0] == graph.nodes[clicked_node_index] || edges[i][1] == graph.nodes[clicked_node_index])
-                               {
-                                 edges.erase(edges.begin() + i);
-                                 tmp.clear();
-                               }
-                       }
-                       }
-                graph.nodes.erase((std::remove(graph.nodes.begin(), graph.nodes.end(), graph.nodes[clicked_node_index])),graph.nodes.end());
-          qDebug() << "delete arrived xd";
+         /* auto ite = std::find(graph.nodes.begin(), graph.nodes.end(), graph.nodes[clicked_node_index]);
+          if(ite != graph.nodes.end())
+          {
+              for (auto it = edges.begin(); it != edges.end(); ++it) {
+                  auto it1 = std::find(*it->begin(), *it->end(), *ite);
+                  if(it1 != *it->end())
+                  {
+                      edges.erase(it);
+                  }
+              }
+              graph.nodes.erase(ite);
+          }*/
+
+
+         // for(size_t j = 0; j < edges.size(); ++j)
+                //   {
+                   for(size_t i = 0; i < edges.size(); ++i)
+                   {
+                           if(edges[i][0] == graph.nodes[clicked_node_index] || edges[i][1] == graph.nodes[clicked_node_index])
+                           {
+                              qDebug() << "edges size" << edges.size();
+                               qDebug() << "edges index" << i;
+                                edges.erase(edges.begin() + i);
+
+                                for(size_t j = 0; j < graph.nodes.size(); ++j)
+                                {
+                                    for(size_t k = 0; k < graph.nodes[j]->m_nexts.size(); ++k)
+                                    {
+                                        if(graph.nodes[j]->m_nexts[k] == graph.nodes[clicked_node_index])
+                                        {
+                                            graph.nodes[j]->m_nexts.erase(graph.nodes[j]->m_nexts.begin() + k);
+                                            --k;
+                                        }
+                                    }
+
+                                 }
+                                --i;
+                           }
+
+                   }
+                  // }
+           qDebug() << "a2";
+
+          int indexof = clicked_node_index;
+          qDebug() << "nodes size" << graph.nodes.size();
+          qDebug() << "index" << indexof;
+
+           graph.nodes.erase(graph.nodes.begin() + indexof);
+          //  graph.nodes.erase((std::remove(graph.nodes.begin(), graph.nodes.end(), graph.nodes[clicked_node_index])),graph.nodes.end());
+           //  qDebug() << "a2.1";
+      qDebug() << "---------";
         }
     }
     else if(add_edge_received == true && clicked_on_node == true)
@@ -112,34 +160,38 @@ if (event->button() == Qt::LeftButton)
             if(tmp.empty())
             {
                 tmp.push_back(graph.nodes[clicked_node_index]);
+                index_of_first = clicked_node_index;
             }
             else if(tmp.size() == 1){
-
-
                 if(!edges.empty())
                 {
-
+                    tmp.push_back(graph.nodes[clicked_node_index]);
                     for(size_t i = 0; i < edges.size(); ++i)
                     {
                         if((edges[i][0] == tmp[0] && edges[i][1] == tmp[1]) || (edges[i][0] == tmp[1] && edges[i][1] == tmp[0]))
                         {
-                        std::vector<Node*> temporary;
-                        temporary = *(edges.begin()+i);
-                       // edges.erase(temporary);
-                        edges.erase((std::remove(edges.begin(), edges.end(), temporary)),edges.end());
-
-                        qDebug() << "fffffffffffffffffffffd";
-                        qDebug() << tmp.size();
-                        tmp.clear();
+                        edges.erase(edges.begin() + i);
                         break;
                         }
                     }
-                }
-            }
 
-            if(tmp.size() >= 2)
-            {
-                 tmp.clear();
+                    for(size_t k = 0; k < graph.nodes[clicked_node_index]->m_nexts.size(); ++k)
+                    {
+                        if(graph.nodes[clicked_node_index]->m_nexts[k] == tmp[0])
+                         {
+                            graph.nodes[clicked_node_index]->m_nexts.erase(graph.nodes[clicked_node_index]->m_nexts.begin() + k);
+                         }
+                    }
+                    for(size_t k = 0; k < graph.nodes[index_of_first]->m_nexts.size(); ++k)
+                    {
+                        if(graph.nodes[index_of_first]->m_nexts[k] == tmp[1])
+                         {
+                            graph.nodes[index_of_first]->m_nexts.erase(graph.nodes[index_of_first]->m_nexts.begin() + k);
+                         }
+                    }
+
+                    tmp.clear();
+                }
             }
         }
         else
@@ -172,11 +224,7 @@ if (event->button() == Qt::LeftButton)
                 {
                     edges.push_back(tmp); 
                     emit add_edge_signal_for_graph(tmp[0], tmp[1]);
-                    tmp.clear();
                 }
-            }
-            if(tmp.size() >= 2)
-            {
                 tmp.clear();
             }
         }

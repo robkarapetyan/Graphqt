@@ -19,6 +19,7 @@ signals:
     void objects_total_signal(size_t,size_t);
     void add_edge_signal_for_graph(Node*,Node*);
     void show_blocks();
+    void show_bridges();
 public slots:
     void Receiving_button(int t);
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -29,6 +30,7 @@ public slots:
 protected:
 
 private:
+    size_t index_of_first = 0;
     bool clicked_on_node = false;
     std::vector<std::vector<Node *>> edges;
     size_t clicked_node_index;

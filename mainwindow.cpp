@@ -8,13 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    this->setWindowTitle("Graph Editor Project");
     QObject::connect(this,SIGNAL(Add_vertex_signal(int)),ui->xmywidget,SLOT(Receiving_button(int)));
     QObject::connect(this,SIGNAL(Add_edge_signal(int)),ui->xmywidget,SLOT(Receiving_button(int)));
     QObject::connect(this,SIGNAL(delete_signal(int)),ui->xmywidget,SLOT(Receiving_button(int)));
     QObject::connect(ui->xmywidget,SIGNAL(objects_total_signal(size_t,size_t)),this,SLOT(Receiving_objects_counter(size_t,size_t)));
     QObject::connect(this,SIGNAL(show_blocks_signal(int)),ui->xmywidget,SLOT(Receiving_button(int)));
-
+    QObject::connect(this,SIGNAL(show_bridges_signal(int)),ui->xmywidget,SLOT(Receiving_button(int)));
 }
 
 MainWindow::~MainWindow()
@@ -26,12 +26,14 @@ void MainWindow::on_add_vertex_clicked()
 {
     emit Add_vertex_signal(1);
     ui->label->setText("Vertex edit mode");
+    ui->addedge->setChecked(false);
 }
 
 void MainWindow::on_addedge_clicked()
 {
     emit Add_edge_signal(2);
     ui->label->setText("Edge edit mode");
+    ui->add_vertex->setChecked(false);
 }
 
 void MainWindow::Receiving_objects_counter(size_t v, size_t e)
@@ -51,4 +53,9 @@ void MainWindow::on_show_blocks_clicked()
 void MainWindow::on_delete_2_clicked()
 {
     emit delete_signal(4);
+}
+
+void MainWindow::on_show_bridges_clicked()
+{
+    emit show_bridges_signal(5);
 }

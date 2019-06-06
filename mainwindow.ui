@@ -39,7 +39,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>111</width>
+         <width>101</width>
          <height>16</height>
         </rect>
        </property>
@@ -90,17 +90,23 @@
           <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="text">
          <string>add vertex</string>
         </property>
+        <property name="shortcut">
+         <string/>
+        </property>
         <property name="checkable">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="checked">
          <bool>false</bool>
         </property>
         <property name="autoRepeat">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -109,12 +115,18 @@
         <property name="text">
          <string>add edge</string>
         </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="delete_2">
         <property name="text">
          <string>delete</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -126,10 +138,17 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>388</height>
+          <height>328</height>
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="show_bridges">
+        <property name="text">
+         <string>show bridges</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="show_blocks">
