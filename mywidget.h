@@ -18,7 +18,6 @@ public:
 signals:
     void objects_total_signal(size_t,size_t);
     void add_edge_signal_for_graph(Node*,Node*);
-    void show_blocks();
     void show_bridges();
 public slots:
     void Receiving_button(int t);

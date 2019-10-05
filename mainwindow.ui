@@ -150,13 +150,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="show_blocks">
-        <property name="text">
-         <string>Show blocks</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>

@@ -141,18 +141,18 @@ inline void Graph::get_cutpoints()
 {
     if (cutpoints.empty())
             {
-                //calc_cutpoints();
+                calc_cutpoints();
             }
     for (size_t i = 0; i < cutpoints.size(); ++i) {
         for (size_t k = 0; k < nodes.size(); ++k)
         {
             if (cutpoints[i] == nodes[k])
             {
-                qDebug() << k;
+               // qDebug() << k;
             }
         }
     }
-    qDebug() << "";
+    //qDebug() << "";
 }
 
 void Graph::calc_cutpoints()
@@ -269,10 +269,7 @@ void Graph::calc_blocks()
 
                          bridges.push_back(tp);
                          blocks.push_back(tp);
-
-
-
-                     }
+                        }
                      }
 
 
@@ -282,55 +279,45 @@ void Graph::calc_blocks()
 
 
     }
-    else
-    {
+    else{
 
-    calc_cutpoints();
-    blocks.clear();
-    bridges.clear();
-    visited_vertexes.clear();
-    for (size_t i = 0; i < cutpoints.size(); ++i) {
-        nexts_of_current_cutpoint_wich_are_cutpoints_too.clear();
-        for (size_t j = 0; j < cutpoints[i]->m_nexts.size(); ++j) {
-            if (!is_cutpoint(cutpoints[i]->m_nexts[j])) { //The next vertex isn't cutpoint
-                current_block.clear();
-                DFS_for_blocks(cutpoints[i]->m_nexts[j], cutpoints[i]);
-                auto it1 = std::find(current_block.begin(), current_block.end(), cutpoints[i]);
-                if (!current_block.empty()) {
-                    if (it1 == current_block.end()) { current_block.push_back(cutpoints[i]); }
-                    blocks.push_back(current_block);
+        calc_cutpoints();
+        blocks.clear();
+        bridges.clear();
+        visited_vertexes.clear();
+        for (size_t i = 0; i < cutpoints.size(); ++i) {
+            nexts_of_current_cutpoint_wich_are_cutpoints_too.clear();
+            for (size_t j = 0; j < cutpoints[i]->m_nexts.size(); ++j) {
+                if (!is_cutpoint(cutpoints[i]->m_nexts[j])) { //The next vertex isn't cutpoint
+                    current_block.clear();
+                    DFS_for_blocks(cutpoints[i]->m_nexts[j], cutpoints[i]);
+                    auto it1 = std::find(current_block.begin(), current_block.end(), cutpoints[i]);
+                    if (!current_block.empty()) {
+                        if (it1 == current_block.end()) { current_block.push_back(cutpoints[i]); }
+                        blocks.push_back(current_block);
+                    }
+                }
+                else {
+                    nexts_of_current_cutpoint_wich_are_cutpoints_too.push_back(cutpoints[i]->m_nexts[j]);
+
                 }
             }
-            else {
-                nexts_of_current_cutpoint_wich_are_cutpoints_too.push_back(cutpoints[i]->m_nexts[j]);
-
-            }
-        }
-
-
-
-            if(circle_search_dfs(cutpoints[i]))
-            {
-                qDebug() << "sasa";
-                std::sort(visited_vertexes.begin(),visited_vertexes.end());
-                auto it1 = std::find(blocks.begin(),blocks.end(),visited_vertexes);
-                if(it1 == blocks.end())
+                if(circle_search_dfs(cutpoints[i]))
                 {
-                     blocks.push_back(visited_vertexes);
+                    qDebug() << "sasa";
+                    std::sort(visited_vertexes.begin(),visited_vertexes.end());
+                    auto it1 = std::find(blocks.begin(),blocks.end(),visited_vertexes);
+                    if(it1 == blocks.end())
+                    {
+                        blocks.push_back(visited_vertexes);
+                    }
+
                 }
-
-            }
-
              //qDebug() << circle_search_dfs(cutpoints[i]) ;
-
-
-
-
              for (size_t k = 0; k < nexts_of_current_cutpoint_wich_are_cutpoints_too.size(); ++k)
              {
 
-
-        }
+             }
            /*  for (size_t j = 0; j < cutpoints[i]->m_nexts.size(); ++j)
              {
                   DFS_with_ignore(cutpoints[i]->m_nexts[j],cutpoints[i]);

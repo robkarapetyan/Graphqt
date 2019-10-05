@@ -6,7 +6,6 @@
 mywidget::mywidget(QWidget *parent) : QWidget(parent)
 {
     QObject::connect(this,SIGNAL(add_edge_signal_for_graph(Node*,Node*)),&graph,SLOT(add_edge_to_node_slot(Node*,Node*)));
-    QObject::connect(this,SIGNAL(show_blocks()),&graph,SLOT(show_blocks_slot()));
     QObject::connect(this,SIGNAL(show_bridges()),&graph,SLOT(show_bridges_slot()));
 
     QPalette Pal(palette());
@@ -32,7 +31,6 @@ void mywidget::Receiving_button(int t)
       add_vertex_received = false;
     break;
     case 3:
-    emit show_blocks();
     break;
     case 4:
     delete_received = !delete_received;
@@ -68,9 +66,6 @@ void mywidget::mousePressEvent(QMouseEvent *event){
             {
                clicked_on_node = true;
                clicked_node_index = i;
-
-
-              // qDebug() << clicked_node_index;
                break;
              }
             else{
@@ -95,22 +90,6 @@ if (event->button() == Qt::LeftButton)
       }
       else if(delete_received && clicked_on_node)
         {
-         /* auto ite = std::find(graph.nodes.begin(), graph.nodes.end(), graph.nodes[clicked_node_index]);
-          if(ite != graph.nodes.end())
-          {
-              for (auto it = edges.begin(); it != edges.end(); ++it) {
-                  auto it1 = std::find(*it->begin(), *it->end(), *ite);
-                  if(it1 != *it->end())
-                  {
-                      edges.erase(it);
-                  }
-              }
-              graph.nodes.erase(ite);
-          }*/
-
-
-         // for(size_t j = 0; j < edges.size(); ++j)
-                //   {
                    for(size_t i = 0; i < edges.size(); ++i)
                    {
                            if(edges[i][0] == graph.nodes[clicked_node_index] || edges[i][1] == graph.nodes[clicked_node_index])
@@ -135,23 +114,12 @@ if (event->button() == Qt::LeftButton)
                            }
 
                    }
-                  // }
-           qDebug() << "a2";
-
-          int indexof = clicked_node_index;
-          qDebug() << "nodes size" << graph.nodes.size();
-          qDebug() << "index" << indexof;
-
-           graph.nodes.erase(graph.nodes.begin() + indexof);
-          //  graph.nodes.erase((std::remove(graph.nodes.begin(), graph.nodes.end(), graph.nodes[clicked_node_index])),graph.nodes.end());
-           //  qDebug() << "a2.1";
-      qDebug() << "---------";
+          size_t indexof = clicked_node_index;
+          graph.nodes.erase(graph.nodes.begin() + indexof);
         }
     }
     else if(add_edge_received == true && clicked_on_node == true)
     {
-
-       // check if node is selected and don't let release to work,if selected items are above 2
         if(delete_received)
         {
             qDebug() << "delete edge arrived";
@@ -240,9 +208,6 @@ void mywidget::paintEvent(QPaintEvent *event){
     {
        for(size_t i = 0; i < edges.size();++i)
         {
-           // QPen linepen(Qt::red);
-           // linepen.setWidth(5);
-           // p.setPen(linepen);
             if(edges[i][0] != edges[i][1])
             {
                 QLine a;
@@ -256,12 +221,6 @@ void mywidget::paintEvent(QPaintEvent *event){
             }
         }
     }
-    //QRect r(0,0,m_mousePos.x(),m_mousePos.y());
-   // p.moveCenter(QPoint(width()/2,height()/2));
-
-   // p.drawEllipse(r);
-   // update();
-
     if(!graph.nodes.empty())
     {
         for(size_t i = 0; i < graph.nodes.size();++i)
@@ -298,27 +257,6 @@ void mywidget::mouseReleaseEvent(QMouseEvent *event){
     }
 }
 
-/*
- *
- *   QVector<Node *> tmp1;
-                if(tmp[0]->m_point != tmp[1]->m_point)
-                {
-                    tmp1.push_back(tmp[1]);
-                    tmp1.push_back(tmp[0]);
-                }
-
-                if(edges.contains(tmp))
-                 {
-                    edges.erase(&edges[edges.indexOf(tmp)]);
-                    tmp.clear();
-                 }
-                else if(edges.contains(tmp1))
-                {
-                    edges.erase(&edges[edges.indexOf(tmp1)]);
-                    tmp.clear();
-                }
-
-*/
 
 
 
